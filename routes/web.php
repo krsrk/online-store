@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('/dashboard/catalog', 'dashboard\CatalogController');
+Route::resource('/dashboard/product', 'dashboard\productController');
+Route::resource('/dashboard/users', 'dashboard\UserController');
+Route::resource('/dashboard/orders', 'dashboard\OrderController');
+
