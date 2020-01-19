@@ -1,100 +1,102 @@
 <template>
-<div>
-    <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      clipped
-    >
-      <v-list dense>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon>mdi-view-dashboard</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon>mdi-settings</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Settings</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-app-bar
-      app
-      clipped-left
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Application</v-toolbar-title>
-    </v-app-bar>
-
-    <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
+    <v-app id="keep">
+        <v-app-bar
+            app
+            clipped-left
+            color="blue darken-1"
         >
-          <v-col class="shrink">
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  :href="source"
-                  icon
-                  large
-                  target="_blank"
-                  v-on="on"
-                >
-                  <v-icon large>mdi-code-tags</v-icon>
-                </v-btn>
-              </template>
-              <span>Source</span>
-            </v-tooltip>
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  icon
-                  large
-                  href="https://codepen.io/johnjleider/pen/bXNzZL"
-                  target="_blank"
-                  v-on="on"
-                >
-                  <v-icon large>mdi-codepen</v-icon>
-                </v-btn>
-              </template>
-              <span>Codepen</span>
-            </v-tooltip>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-content>
+            <span class="title ml-3 mr-5" color="white">Comic&nbsp;<span class="font-weight-light">Store</span></span>
+            <v-text-field
+                solo-inverted
+                flat
+                hide-details
+                label="Search"
+                prepend-inner-icon="search"
+            />
 
-    <v-footer app>
-      <span>&copy; 2019</span>
-    </v-footer>
-  </v-app>
-</div>
+            <v-spacer />
+        </v-app-bar>
 
+
+        <v-content>
+            <v-container fluid class="grey lighten-4 fill-height">
+              <v-row>
+                  <v-col v-for="comic in comics" :key="comic.product_id" cols="6" sm="4">
+                      <v-card class="mx-auto" max-width="344">
+                          <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
+
+                          <v-card-title>{{comic.product_name}}</v-card-title>
+
+                          <v-card-subtitle>${{comic.price}}</v-card-subtitle>
+
+                          <v-card-actions>
+                              <v-btn @click="addCart(item)" text>Comprar</v-btn>
+
+                              <v-btn color="blue" @click="addCart(comic)" text>Agregar al carrito</v-btn>
+
+                              <v-spacer></v-spacer>
+
+                              <v-btn icon @click="show = !show">
+                                  <v-icon>{{ show ? 'chevron-up' : 'chevron-down' }}</v-icon>
+                              </v-btn>
+                          </v-card-actions>
+
+                          <v-expand-transition>
+                              <div v-show="show">
+                                  <v-divider></v-divider>
+
+                                  <v-card-text>
+                                    {{comic.description}}
+                                  </v-card-text>
+                              </div>
+                          </v-expand-transition>
+                      </v-card>
+                  </v-col>
+              </v-row>
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
-  export default {
-    props: {
-      source: String,
-    },
-    data: () => ({
-      drawer: null,
-    }),
-    created () {
-      this.$vuetify.theme.dark = true
-    },
-  }
+    export default {
+        props: {
+            source: String,
+        },
+        data: () => ({
+            drawer: null,
+            show:false,
+            comics : [],
+            cart:[]
+
+        }),
+        cart:[],
+        created () {
+
+            this.getComics();
+        },
+        methods:{
+            initialize(){
+                this.getComics();
+            },
+
+            async getComics(){
+                let response = await axios.get('/api/products/').then(response=>{
+                    this.comics = response.data.data;
+                    console.log(response.data.data)
+                })
+        },
+            addCart(comic){
+                //console.log(comic)
+                this.cart.push(comic.product_guid)
+                console.log(this.cart)
+            }
+        }
+    }
 </script>
+
+<style>
+    #keep .v-navigation-drawer__border {
+        display: none
+    }
+</style>

@@ -1,3 +1,9 @@
-<div id="app">
-    <example-component></example-component>
-</div>
+
+
+@extends('layouts.base')
+@section('content')
+
+    <v-app>
+        <home-index></home-index>
+    </v-app>
+@endsection

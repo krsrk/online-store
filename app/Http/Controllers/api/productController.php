@@ -1,22 +1,33 @@
 <?php
 
 namespace App\Http\Controllers\api;
-use App\Product;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Repositories\ProductRepository;
 
-class productController extends Controller
+
+class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    protected $repository;
+
+    public function __construct()
     {
-        //
-    $products = Product::orderBy('created_at')->paginate(10);
-     return response()->json(array("data"=> $products ,"code"=>200));
+        $this->repository = new ProductRepository();
+    }
+
+    public function index(Request $request)
+    {
+        $data = $this->repository->all();
+ 
+        return response()->json($data, 200);   
+    }
+
+    public function findByGuid(Request $request, $guid)
+    {
+        $data = $this->repository->byGuid($guid);
+
+        return response()->json($data, 200);   
     }
 
     /**

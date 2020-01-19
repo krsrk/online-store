@@ -38,10 +38,10 @@
                               Administración
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="{{route('users.index')}}">Usuarios</a>
-                              <a class="dropdown-item" href="{{route('product.index')}}">Productos</a>
+                              <a class="dropdown-item" href="{{route('dashboard.products')}}">Productos</a>
+                              <a class="dropdown-item" href="{{route('dashboard.users')}}">Usuarios</a>
                               <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href="{{route('orders.index')}}">Ordenes</a>
+                              <a class="dropdown-item" href="{{route('dashboard.orders')}}">Ordenes</a>
                             </div>
                           </li>
                     </ul>
@@ -53,11 +53,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

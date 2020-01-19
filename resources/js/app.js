@@ -20,6 +20,9 @@ Vue.component('user-index', require('./components/dashboard/users/IndexUsers').d
 // ORDERS IMPORT
 Vue.component('order-index', require('./components/dashboard/orders/IndexOrders').default);
 
+//Home IMPORT
+Vue.component('home-index',require('./components/web/HomeComponent').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

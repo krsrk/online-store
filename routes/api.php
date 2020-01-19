@@ -16,8 +16,14 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/postProduct', 'api\productController@store');
-Route::get('/getProduct', 'api\productController@index');
-Route::put('/updateProduct/{id}', function ($id) {
 
+//Route::post('/postProduct', 'api\productController@store');
+//Route::get('/getProduct', 'api\productController@index');
+/*Route::put('/updateProduct/{id}', function ($id) {
+
+});*/
+
+Route::group(['prefix' => 'products'], function(){
+    Route::get('/', 'api\ProductController@index');
+    Route::get('/guid/{guid}', 'api\ProductController@findByGuid');
 });

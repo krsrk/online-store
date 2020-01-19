@@ -7,7 +7,8 @@ use App\User;
 
 class Product extends Model
 {
-    //
+    protected $table = 'product';
+
     protected $fillable = ['product_name','product_guid','id_user_maker','id_user_publisher','description','price','image','status'];
 
     public function user()

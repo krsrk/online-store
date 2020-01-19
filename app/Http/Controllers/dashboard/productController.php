@@ -1,12 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\dashboard;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\ProductRepository;
 
-class productController extends Controller
+class ProductController extends Controller
 {
+    protected $repository;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->repository = new ProductRepository();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,72 +25,58 @@ class productController extends Controller
     public function index()
     {
         //
-        return view('dashboard.products.productIndex');
+        return view('dashboard.products.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show(Request $request)
     {
-    return view('dashboard.products.productPost');
+        //Peticion por GET
+        if ($request->has('id')) {
+           $data = $this->repository->byGuid($request->id);
+        } else {
+           $data = $this->repository->all();
+        }
+
+        return response()->json($data, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function showAll(Request $request)
     {
-        //
+        //Peticion por GET
+            $data = $this->repository->all();
+
+        return response()->json($data, 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function create(Request $request)
     {
-        //
+        $this->repository->insert($request);
+
+        return response()->json('Producto creado con exito!', 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(Request $request, $id=0)
     {
-        //
+        $this->repository->update($request);
+
+        return response()->json('Producto actualizado con exito!', 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function destroy(Request $request, $id=0)
     {
-        //
-    }
+        $this->repository->delete($request->guid);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+        return response()->json('Producto borrado con exito!', 200);
+    }
+    public function publishProduct(Request $request ,$id=0)
     {
-        //
+        $this->repository->publish($request->guid);
+        return response()->json('Producto publicado correctamente',200);
+    }
+    public function uploadImage(Request $request ,$id=0)
+    {
+        $this->repository->publish($request);
+        return response()->json('Producto publicado correctamente',200);
     }
 }
